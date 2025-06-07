@@ -1,9 +1,9 @@
-- type: web
-  name: ssdr-client
-  env: static
-  rootDir: client
-  buildCommand: npm install && npm run build
-  staticPublishPath: build
-  envVars:
-    - key: VITE_API_URL
-      sync: false
+type: web
+name: ssdr-client
+env: static
+rootDir: client
+buildCommand: npm install && npm run build
+staticPublishPath: build
+envVars:
+  key: VITE_API_URL
+  sync: false
