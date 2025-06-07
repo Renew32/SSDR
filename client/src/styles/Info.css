@@ -1,0 +1,21 @@
+.Info {
+    max-width: 960px;
+    font-family: system-ui, sans-serif;
+}
+  
+
+.top-navbar {
+    background-color: white;
+    z-index: 1040;
+    display: inline;
+    height: 75px;
+    margin-bottom: 300px;
+}
+
+.nav-link{
+    color: white;
+}
+
+#brand{
+    color: rgb(189, 50, 30);
+}
