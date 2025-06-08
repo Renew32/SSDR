@@ -2,7 +2,12 @@
     max-width: 960px;
     font-family: system-ui, sans-serif;
 }
-  
+
+.container {
+    max-width: 960px (ou 1140px selon breakpoint);
+    padding: 0 15px;
+    margin: 0 auto;
+}
 
 .top-navbar {
     background-color: white;
@@ -18,4 +23,8 @@
 
 #brand{
     color: rgb(189, 50, 30);
+}
+
+#btn1{
+    border-radius: 1000px;
 }
