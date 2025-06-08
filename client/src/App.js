@@ -1,5 +1,5 @@
 import "./App.css";
-import Payment from "./Payment";
+import Payment from "./pages/Payment";
 import Completion from "./Completion";
 import Info from "./pages/Info";
 
