@@ -4,8 +4,10 @@ import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 
 function Payment(props) {
-  const [stripePromise, setStripePromise] = useState(null);
+  const stripePromise = loadStripe(publishableKey);
+  //const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
+  
 
   useEffect(() => {
     fetch("/config").then(async (r) => {
@@ -42,6 +44,8 @@ function Payment(props) {
         console.error("Error in /create-payment-intent:", error);
       });
   }, []);
+
+
 
   return (
     <>

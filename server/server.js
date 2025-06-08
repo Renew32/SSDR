@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const { resolve } = require("path");
 const env = require("dotenv").config({ path: "./.env" });
-const PORT = process.env.PORT || 5252;
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-08-01",
@@ -11,6 +10,9 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
 
 app.use(express.json()); // ← obligatoire !
 
+app.get("/", (req, res) => {
+  res.send("🚀 API server is running!");
+});
 
 app.get("/config", (req, res) => {
   res.send({
@@ -38,7 +40,6 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-
-app.listen(PORT, () =>
-  console.log(`Node server listening at http://localhost:${PORT}`)
+app.listen(5252, () =>
+  console.log(`Node server listening at http://localhost:5252`)
 );
