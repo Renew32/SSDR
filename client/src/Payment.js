@@ -1,55 +1,87 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "./CheckoutForm";
-import { Elements } from "@stripe/react-stripe-js";
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements
+} from "@stripe/react-stripe-js";
 
-function Payment(props) {
-  const stripePromise = loadStripe(publishableKey);
-  //const [stripePromise, setStripePromise] = useState(null);
-  const [clientSecret, setClientSecret] = useState("");
-  
+const CheckoutForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/config`).then(async (r) => {
-      const data = await r.json();
-      console.log("CONFIG RESPONSE:", data); // Debug
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
 
-      const { publishableKey } = data;
-      if (publishableKey) {
-        setStripePromise(loadStripe(publishableKey));
-      } else {
-        console.error("publishableKey is missing!");
-      }
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.origin,
+      },
     });
-  },);
+
+    if (error) {
+      console.log(error.message);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      <button disabled={!stripe} className="btn btn-primary mt-3">
+        Pay
+      </button>
+    </form>
+  );
+};
+
+export default function Payment() {
+  const [stripePromise, setStripePromise] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    fetch("/create-payment-intent", {
+    fetch(`${import.meta.env.VITE_API_URL}/config`)
+      .then(async (r) => {
+        const data = await r.json();
+        console.log("CONFIG RESPONSE:", data);
+
+        const { publishableKey } = data;
+        if (publishableKey) {
+          setStripePromise(loadStripe(publishableKey));
+        } else {
+          console.error("publishableKey is missing!");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching config:", err);
+      });
+
+    fetch(`${import.meta.env.VITE_API_URL}/create-payment-intent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
     })
       .then(async (r) => {
         const data = await r.json();
-        console.log("PAYMENT INTENT RESPONSE:", data); // Debug
+        console.log("PAYMENT INTENT RESPONSE:", data);
 
-        const { clientSecret } = data;
-        if (clientSecret) {
-          setClientSecret(clientSecret);
+        if (data.clientSecret) {
+          setClientSecret(data.clientSecret);
         } else {
           console.error("clientSecret is missing!");
         }
       })
-      .catch((error) => {
-        console.error("Error in /create-payment-intent:", error);
+      .catch((err) => {
+        console.error("Error creating payment intent:", err);
       });
   }, []);
 
-
-
   return (
-    <>
-      <h3>CanadianCourrier</h3>
+    <main className="container py-5">
+      <h2 className="mb-4">CanadianCourrier</h2>
       {stripePromise && clientSecret ? (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />
@@ -57,8 +89,6 @@ function Payment(props) {
       ) : (
         <p>Chargement du paiement...</p>
       )}
-    </>
+    </main>
   );
 }
-
-export default Payment;
