@@ -12,12 +12,3 @@ services:
         sync: false
       - key: STATIC_DIR
         value: ../client
-
-  - type: static_site
-    name: ssdr-client
-    rootDir: client
-    buildCommand: npm install && npm run build
-    staticPublishPath: build
-    envVars:
-      - key: VITE_API_URL
-        sync: false
