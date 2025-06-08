@@ -6,9 +6,10 @@ import { Elements } from "@stripe/react-stripe-js";
 function Payment(props) {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
+  const API_URL = "https://ssdr-2.onrender.com";
 
   useEffect(() => {
-    fetch("/config").then(async (r) => {
+    fetch(`${API_URL}/config`).then(async (r) => {
       const data = await r.json();
       console.log("CONFIG RESPONSE:", data); // Debug
 
@@ -22,7 +23,7 @@ function Payment(props) {
   }, []);
 
   useEffect(() => {
-    fetch("/create-payment-intent", {
+    fetch(`${API_URL}/create-payment-intent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({}),
