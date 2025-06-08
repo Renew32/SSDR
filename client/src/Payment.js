@@ -10,7 +10,7 @@ function Payment(props) {
   
 
   useEffect(() => {
-    fetch("/config").then(async (r) => {
+    fetch(`${import.meta.env.VITE_API_URL}/config`).then(async (r) => {
       const data = await r.json();
       console.log("CONFIG RESPONSE:", data); // Debug
 
@@ -21,7 +21,7 @@ function Payment(props) {
         console.error("publishableKey is missing!");
       }
     });
-  }, []);
+  },);
 
   useEffect(() => {
     fetch("/create-payment-intent", {
