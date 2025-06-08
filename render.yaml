@@ -1,22 +1,9 @@
-services:
-  - type: web
-    name: ssdr-server
-    env: node
-    rootDir: server
-    buildCommand: npm install
-    startCommand: node server.js
-    envVars:
-      - key: STRIPE_SECRET_KEY
-        sync: false              # tu ajouteras la valeur dans le dashboard Render
-      - key: STRIPE_PUBLISHABLE_KEY
-        sync: false
-
-  - type: static
-    name: ssdr-client
-    rootDir: client
-    buildCommand: npm install && npm run build
-    staticPublishPath: client/build
-    envVars:
-      - key: VITE_API_URL
-        sync: false              # tu ajouteras par ex. https://ssdr-server.onrender.com
-  
+type: web
+name: ssdr-client
+env: static
+rootDir: client
+buildCommand: npm install && npm run build
+staticPublishPath: build
+envVars:
+  key: VITE_API_URL
+  sync: false
