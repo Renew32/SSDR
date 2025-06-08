@@ -1,28 +1,24 @@
-// Charge les variables d'env
+// Charge les variables d'environnement
 require("dotenv").config({ path: "./.env" });
 
-// Imports
 const express = require("express");
 const cors = require("cors");
-const { resolve } = require("path");
+const path = require("path");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-08-01",
 });
 
-// Init
 const app = express();
 
 // Middlewares
-app.use(cors());                       // Autorise les requêtes cross-origin
-app.use(express.json());               // Parse les JSON
-app.use(express.static(process.env.STATIC_DIR));  // Sert le front
+app.use(cors());                // Autorise toutes les origines
+app.use(express.json());        // Parse les corps JSON
 
-// Routes
-app.get("/", (req, res) => {
-  const indexPath = resolve(process.env.STATIC_DIR, "index.html");
-  res.sendFile(indexPath);
-});
+// Sert le build React statique
+const staticPath = path.join(__dirname, "client", "build");
+app.use(express.static(staticPath));
 
+// Routes API
 app.get("/config", (req, res) => {
   res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
 });
@@ -41,7 +37,12 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-// Démarrage
+// Pour toutes les autres routes, renvoie index.html (React Router)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(staticPath, "index.html"));
+});
+
+// Démarrage du serveur
 const PORT = process.env.PORT || 5252;
 app.listen(PORT, () => {
   console.log(`Node server listening at http://localhost:${PORT}`);
