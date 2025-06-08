@@ -7,7 +7,6 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 
-const API_URL = "https://ssdr-2.onrender.com";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -47,8 +46,7 @@ export default function Payment() {
 
   useEffect(() => {
 
-    //fetch(`${import.meta.env.VITE_API_URL}/config`)
-    fetch(`${API_URL}/config`)
+    fetch(`${import.meta.env.VITE_API_URL}/config`)
       .then(async (r) => {
         const data = await r.json();
         console.log("CONFIG RESPONSE:", data);
