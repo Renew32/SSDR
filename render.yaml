@@ -13,7 +13,7 @@ services:
       - key: STATIC_DIR
         value: ../client
 
-  - type: static
+  - type: static_site
     name: ssdr-client
     rootDir: client
     buildCommand: npm install && npm run build
